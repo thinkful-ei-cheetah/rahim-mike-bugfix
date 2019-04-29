@@ -26,6 +26,28 @@ app.get('/sum', (req, res) => {
   res.send(resResult);
 });
 
+app.get('/cipher', (req, res) => {
+  let { text, shift } = req.query;
+  //split text into array.
+  const newText = text
+    .toUpperCase()
+    .split('')
+    .map(
+      letter => Number.parseInt(letter.charCodeAt(0)) + Number.parseInt(shift)
+    )
+    .map(code => {
+      console.log(code);
+      if (code > 90) {
+        return code - 26;
+      } else {
+        return code;
+      }
+    })
+    .map(code => String.fromCharCode(code));
+
+  res.send(newText);
+});
+
 app.listen(8000, () => {
   console.log('Server is running');
 });
