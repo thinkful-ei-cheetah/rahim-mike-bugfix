@@ -48,6 +48,49 @@ app.get('/cipher', (req, res) => {
   res.send(newText);
 });
 
+app.get('/lotto', (req, res) => {
+  let { numbers } = req.query;
+
+  const randomNum = numbers
+    .map(num => parseInt(num))
+    .filter(num => num >= 1 && num <= 20);
+
+  if (!randomNum) {
+    res.send('Please only use number between 1 and 20');
+  }
+  let winningNumbers = [];
+
+  for (let i = 1; i <= 6; i++) {
+    winningNumbers.push(Math.floor(Math.random() * 21));
+  }
+
+  let matchingNumber = 0;
+
+  for (let i = 0; i < winningNumbers.length; i++) {
+    for (let j = 0; j < randomNum.length; j++) {
+      if (winningNumbers[i] === randomNum[j]) {
+        matchingNumber++;
+      }
+    }
+  }
+  let responseText;
+  switch (matchingNumber) {
+    case 4:
+      responseText = 'Congratulations, you win a free ticket';
+      break;
+    case 5:
+      responseText = 'Congratulations! You win $100!';
+      break;
+    case 6:
+      responseText = 'Wow! Unbelievable! You could have won the mega millions!';
+      break;
+    default:
+      responseText = 'Sorry you lose';
+  }
+
+  res.send(responseText);
+});
+
 app.listen(8000, () => {
   console.log('Server is running');
 });
